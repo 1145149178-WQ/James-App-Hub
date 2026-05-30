@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>James_6319 | 应用大全</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            background-attachment: fixed;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* 动态背景网格 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        header {
+            position: relative;
+            z-index: 1;
+            padding: 60px 20px 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #00f2ff, #7000ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(0, 242, 255, 0.3);
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.7);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        /* 搜索框优化 */
+        .search-box {
+            max-width: 650px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 18px 20px 18px 60px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .search-box input:focus {
+            border-color: #00f2ff;
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.6);
+            font-size: 1.3rem;
+        }
+
+        /* 分类标签玻璃效果 */
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tag {
+            padding: 10px 22px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+
+        .tag:hover {
+            background: rgba(0, 242, 255, 0.2);
+            border-color: #00f2ff;
+            transform: translateY(-2px);
+        }
+
+        .tag.active {
+            background: linear-gradient(135deg, #00f2ff, #7000ff);
+            color: #000;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 242, 255, 0.4);
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 20px 20px 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 应用卡片玻璃拟态 */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 28px 22px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .app-card:hover::before {
+            left: 100%;
+        }
+
+        .app-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: #00f2ff;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(0, 242, 255, 0.2), rgba(112, 0, 255, 0.2));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: #00f2ff;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+        }
+
+        .info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .info p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.65);
+            line-height: 1.5;
+        }
+
+        .link-badge {
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(0, 242, 255, 0.15);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #00f2ff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .app-grid { grid-template-columns: 1fr; }
+            .categories { border-radius: 20px; }
+        }
+
+        .empty-state {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 80px 20px;
+            color: rgba(255,255,255,0.5);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>App Hub</h1>
+        <p class="subtitle">专属于 James_6319 的应用导航中心</p>
+        
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="搜索你需要的应用、工具或网站...">
+        </div>
+
+        <div class="categories" id="categoryContainer">
+            <div class="tag active" data-cat="all">全部</div>
+            <div class="tag" data-cat="dev">开发工具</div>
+            <div class="tag" data-cat="design">设计创意</div>
+            <div class="tag" data-cat="learn">学习资源</div>
+            <div class="tag" data-cat="ent">休闲娱乐</div>
+            <div class="tag" data-cat="tool">实用工具</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="app-grid" id="appGrid"></div>
+    </div>
+
+    <footer>
+        &copy; 2026 James_6319 | 玻璃拟态风格导航站
+    </footer>
+
+    <script>
+        // --- 应用数据配置，在这里添加你的网址 ---
+        const apps = [
+            { name: "VS Code", url: "https://code.visualstudio.com", icon: "fa-code", cat: "dev", desc: "微软出品最强代码编辑器，支持全语言开发" },
+            { name: "GitHub", url: "https://github.com", icon: "fa-github", cat: "dev", desc: "全球最大代码托管与开源协作平台" },
+            { name: "Stack Overflow", url: "https://stackoverflow.com", icon: "fa-stack-overflow", cat: "dev", desc: "程序员BUG解答社区" },
+            { name: "Figma", url: "https://www.figma.com", icon: "fa-pen-nib", cat: "design", desc: "在线协作UI/UX设计神器" },
+            { name: "Dribbble", url: "https://dribbble.com", icon: "fa-basketball-ball", cat: "design", desc: "全球顶尖设计师灵感社区" },
+            { name: "Canva可画", url: "https://www.canva.cn", icon: "fa-palette", cat: "design", desc: "零基础做平面设计的在线工具" },
+            { name: "哔哩哔哩", url: "https://www.bilibili.com", icon: "fa-tv", cat: "ent", desc: "年轻人聚集的弹幕视频社区" },
+            { name: "YouTube", url: "https://www.youtube.com", icon: "fa-youtube", cat: "ent", desc: "全球最大视频分享平台" },
+            { name: "MDN Web文档", url: "https://developer.mozilla.org", icon: "fa-book", cat: "learn", desc: "最权威的前端开发技术文档" },
+            { name: "力扣", url: "https://leetcode.cn", icon: "fa-laptop-code", cat: "learn", desc: "算法刷题，准备面试必备" },
+            { name: "谷歌翻译", url: "https://translate.google.com", icon: "fa-language", cat: "tool", desc: "免费精准的多语言在线翻译" },
+            { name: "TinyPNG", url: "https://tinypng.com", icon: "fa-image", cat: "tool", desc: "智能压缩PNG/JPG图片，无损减体积" },
+            { name: "Carbon", url: "https://carbon.now.sh", icon: "fa-code", cat: "tool", desc: "生成美观的代码截图工具" },
+            { name: "Netflix", url: "https://www.netflix.com", icon: "fa-film", cat: "ent", desc: "全球顶级流媒体视频平台" }
+        ];
+
+        // --- 渲染逻辑 ---
+        const grid = document.getElementById('appGrid');
+        const searchInput = document.getElementById('searchInput');
+        const tags = document.querySelectorAll('.tag');
+
+        function renderApps(filterText = '', category = 'all') {
+            grid.innerHTML = '';
+            
+            const filtered = apps.filter(app => {
+                const matchText = app.name.toLowerCase().includes(filterText.toLowerCase()) || 
+                                  app.desc.toLowerCase().includes(filterText.toLowerCase());
+                const matchCat = category === 'all' || app.cat === category;
+                return matchText && matchCat;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="empty-state"><i class="fas fa-search fa-3x mb-3"></i><p>未找到匹配的应用，请换个关键词试试</p></div>';
+                return;
+            }
+
+            filtered.forEach(app => {
+                const card = document.createElement('a');
+                card.className = 'app-card';
+                card.href = app.url;
+                card.target = '_blank';
+                card.innerHTML = `
+                    <div class="icon-box"><i class="fab ${app.icon}"></i></div>
+                    <div class="info">
+                        <h3>${app.name}</h3>
+                        <p>${app.desc}</p>
+                        <div class="link-badge">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>点击跳转</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- 事件绑定 ---
+        searchInput.addEventListener('input', (e) => {
+            const activeCat = document.querySelector('.tag.active').dataset.cat;
+            renderApps(e.target.value, activeCat);
+        });
+
+        tags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                tags.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                renderApps(searchInput.value, tag.dataset.cat);
+            });
+        });
+
+        // 初始化渲染
+        renderApps();
+    </script>
+</body>
+</html>
